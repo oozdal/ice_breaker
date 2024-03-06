@@ -2,9 +2,9 @@ from dotenv import load_dotenv
 from langchain.chains import LLMChain
 from langchain_openai import ChatOpenAI
 from langchain_core.prompts import PromptTemplate
+from third_parties.linkedin import scrape_linkedin_profile
 
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     load_dotenv()
 
     print("Hello LangChain!")
@@ -27,7 +27,9 @@ if __name__ == '__main__':
     llm = ChatOpenAI(temperature=0, model_name="gpt-3.5-turbo")
 
     chain= LLMChain(llm=llm, prompt=summary_prompt_template)
-    res = chain.invoke(input={"information": information})
-
-    print(res)
     
+    linkedin_data = scrape_linkedin_profile(
+    linkedin_profile_url="https://www.linkedin.com/in/harrison-chase-961287118/"
+    )
+    
+    print(chain.run(input={"information": linkedin_data}))
